@@ -13,3 +13,6 @@
 [submodule "colcon_ws/src/bosdyn_msgs"]
 	path = colcon_ws/src/bosdyn_msgs
 	url = https://github.com/rai-opensource/bosdyn_msgs.git
+[submodule "colcon_ws/src/rmw_zenoh"]
+	path = colcon_ws/src/rmw_zenoh
+	url = git@git-ce.rwth-aachen.de:wzl-mq-ms/docker-ros/ros2/rmw_zenoh.git
