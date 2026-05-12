@@ -1,0 +1,18 @@
+[submodule "colcon_ws/src/spot_empty_world"]
+	path = colcon_ws/src/spot_empty_world
+	url = https://github.com/tiago369/spot_empty_world.git
+[submodule "colcon_ws/src/spot_gazebo_ros2"]
+	path = colcon_ws/src/spot_gazebo_ros2
+	url = https://github.com/justyx404/spot_gazebo_ros2.git
+[submodule "colcon_ws/src/spot_moveit_config"]
+	path = colcon_ws/src/spot_moveit_config
+	url = https://github.com/tiago369/spot_moveit_config.git
+[submodule "rmw_zenoh"]
+	path = rmw_zenoh
+	url = git@git-ce.rwth-aachen.de:wzl-mq-ms/docker-ros/ros2/rmw_zenoh.git
+[submodule "colcon_ws/src/bosdyn_msgs"]
+	path = colcon_ws/src/bosdyn_msgs
+	url = https://github.com/rai-opensource/bosdyn_msgs.git
+[submodule "colcon_ws/src/rmw_zenoh"]
+	path = colcon_ws/src/rmw_zenoh
+	url = git@git-ce.rwth-aachen.de:wzl-mq-ms/docker-ros/ros2/rmw_zenoh.git

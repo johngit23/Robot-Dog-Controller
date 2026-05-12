@@ -1,93 +1,183 @@
-# RSS Spot Stack ROS
+# RSS Spot Stack ROS (Simulation Environment)
 
+> **⚠️ IMPORTANT:** This workspace is purely for **simulation**. 
+> - ❌ **Do NOT** connect to a physical robot.
+> - ❌ **Do NOT** set a `robot_ip`.
+> - ❌ **Do NOT** install hardware drivers.
 
+## 📋 Table of Contents
+- [RSS Spot Stack ROS (Simulation Environment)](#rss-spot-stack-ros-simulation-environment)
+  - [📋 Table of Contents](#-table-of-contents)
+  - [🎯 Purpose of This Workspace](#-purpose-of-this-workspace)
+  - [✅ Prerequisites](#-prerequisites)
+  - [📦 Installation \& Build](#-installation--build)
+    - [1. Clone the Repository](#1-clone-the-repository)
+    - [2. Build the Docker Image](#2-build-the-docker-image)
+  - [🚀 Running the Simulation](#-running-the-simulation)
+  - [🧪 Testing Navigation](#-testing-navigation)
+  - [🛠 Useful ROS 2 Commands](#-useful-ros-2-commands)
+  - [🧰 Troubleshooting](#-troubleshooting)
 
-## Getting started
+---
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## 🎯 Purpose of This Workspace
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+This repository provides a **Dockerized ROS 2 environment** for working with the Boston Dynamics Spot mobile base and arm **entirely in simulation**.  
 
-## Add your files
+It is specifically tailored for the **RSS Project**, where students must:
+1. Read sensor data from external microcontrollers (e.g., ESP8266 / MPU6050).
+2. Send this data to ROS 2 over Wi-Fi.
+3. Map sensor values to robot motions.
+4. Control a **simulated Spot robot** in real-time.
 
-* [Create](https://docs.gitlab.com/user/project/repository/web_editor/#create-a-file) or [upload](https://docs.gitlab.com/user/project/repository/web_editor/#upload-a-file) files
-* [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+**Key Features Included:**
+- **URDF visualization** for accurate robot representation.
+- **`ros2_control` with fake hardware** (primary mode).
+- **MoveIt 2** for advanced motion planning and kinematics.
+- **Gazebo / Ignition** for realistic 3D physics simulation.
+
+*(No real robot, IP address, or hardware connection is needed!)*
+
+---
+
+## ✅ Prerequisites
+
+Since this is a containerized environment, ensure you have the following installed on your host machine:
+* [Docker](https://docs.docker.com/get-docker/)
+* [Git](https://git-scm.com/downloads)
+
+---
+
+## 📦 Installation & Build
+
+This project relies on **Git submodules** to pull in the necessary Spot packages. 
+
+### 1. Clone the Repository
+Clone the repo and initialize the submodules automatically:
+```bash
+git clone --recurse-submodules <repository-url>
+cd <repository-folder>
 
 ```
-cd existing_repo
-git remote add origin https://git-ce.rwth-aachen.de/wzl-mq-ms/docker-ros/ros2/rss-spot-stack-ros.git
-git branch -M main
-git push -uf origin main
+
+*(If you already cloned the repo normally, run: `git submodule update --init --recursive`)*
+
+### 2. Build the Docker Image
+
+Inside the root of the repository, build the container environment:
+
+```bash
+bash build.sh
+
 ```
 
-## Integrate with your tools
+*Note: This process may take a few minutes to download and configure the ROS 2 environment.*
 
-* [Set up project integrations](https://git-ce.rwth-aachen.de/wzl-mq-ms/docker-ros/ros2/rss-spot-stack-ros/-/settings/integrations)
+---
 
-## Collaborate with your team
+## 🚀 Running the Simulation
 
-* [Invite team members and collaborators](https://docs.gitlab.com/user/project/members/)
-* [Create a new merge request](https://docs.gitlab.com/user/project/merge_requests/creating_merge_requests/)
-* [Automatically close issues from merge requests](https://docs.gitlab.com/user/project/issues/managing_issues/#closing-issues-automatically)
-* [Enable merge request approvals](https://docs.gitlab.com/user/project/merge_requests/approvals/)
-* [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+You will need to open **three separate terminals** to launch the full simulation stack. Make sure you are in the repository root for each.
 
-## Test and Deploy
+**Terminal 1: Configure Communication Layer**
 
-Use the built-in continuous integration in GitLab.
+```bash
+bash docker_run/setup_zenoh.sh
 
-* [Get started with GitLab CI/CD](https://docs.gitlab.com/ci/quick_start/)
-* [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/user/application_security/sast/)
-* [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/topics/autodevops/requirements/)
-* [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/user/clusters/agent/)
-* [Set up protected environments](https://docs.gitlab.com/ci/environments/protected_environments/)
+```
 
-***
+**Terminal 2: Launch Gazebo (3D Simulation)**
 
-# Editing this README
+```bash
+bash docker_run/docker_run_gazebo.sh
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+```
 
-## Suggestions for a good README
+**Terminal 3: Launch MoveIt (Motion Planning)**
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+```bash
+bash docker_run/docker_run_moveit.sh
 
-## Name
-Choose a self-explaining name for your project.
+```
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+---
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## 🧪 Testing Navigation
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+You can test the base navigation by publishing a velocity command to the robot.
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+**Note:** If you do not have ROS 2 installed on your host machine, you must run these commands *inside* the running Docker container.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+```bash
+# 1. Source the ROS 2 and workspace environments
+source /opt/ros/humble/setup.bash
+source /colcon_ws/install/setup.bash
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+# 2. Set the Zenoh middleware
+export RMW_IMPLEMENTATION=rmw_zenoh_cpp
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+# 3. Publish a velocity command to move Spot forward
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist \
+  "{linear: {x: 0.3}, angular: {z: 0.0}}" --once
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+---
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+## 🛠 Useful ROS 2 Commands
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Once your simulation is running, you can use these commands in a sourced terminal to inspect the system:
 
-## License
-For open source projects, say how it is licensed.
+```bash
+# List all active ROS 2 topics
+ros2 topic list
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+# Monitor the joint states of the robot in real-time
+ros2 topic echo /joint_states
+
+# Verify that the fake hardware controllers are active
+ros2 control list_controllers
+
+# Open the visualizer
+rviz2
+
+```
+
+---
+
+## 🧰 Troubleshooting
+
+**RViz does not start properly or crashes**
+
+Try launching RViz with the Qt5 fix disabled:
+
+```bash
+rviz2 --disable-qt5-fix
+
+```
+
+**Custom topics or packages are missing**
+
+Ensure you have sourced your workspace correctly in your current terminal:
+
+```bash
+source /colcon_ws/install/setup.bash
+
+```
+
+**Nodes aren't communicating (DDS / Discovery issues)**
+
+Ensure the proper middleware and domain IDs are set in every terminal you open:
+
+```bash
+export RMW_IMPLEMENTATION=rmw_zenoh_cpp
+export ROS_DOMAIN_ID=22
+
+```
+
+**How do I update submodules if the upstream branch changes?**
+
+```bash
+git submodule update --remote --merge
+
+```
