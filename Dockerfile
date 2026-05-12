@@ -65,7 +65,9 @@ RUN apt-get update && \
 
 
 RUN apt update && apt install -y --no-install-recommends \
+    ros-humble-moveit \
     ros-humble-moveit-visual-tools \
+    ros-humble-moveit-ros-visualization \
     && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoints/gazebo_entry.sh /gazebo_entry.sh
